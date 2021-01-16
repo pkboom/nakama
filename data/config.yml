@@ -1,0 +1,8 @@
+name: nakama1 
+database:
+  address:
+  - root@cockroachdb:26257
+logger:
+  level: "debug"
+session:
+  token_expiry_sec: 6000
