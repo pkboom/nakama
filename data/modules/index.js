@@ -7,9 +7,8 @@ var fetechSchedule = function (ctx, logger, nk, payload) {
         Accept: 'application/json',
     };
     var json = JSON.parse(payload);
-    logger.info(ctx.userId);
+    logger.info('userId: %s, payload: $q', ctx.userId, json);
     logger.info(json.date);
-    //   logger.debug('user_id: %s, payload: %q', ctx.userId, json)
     var response = nk.httpRequest(API_BASE_URL +
         '/nhl/trial/v7/en/games/2020/REG/schedule.json?api_key=nbqpwfg6z6kv4xezfnb46dnu', // schedule
     // `/nhl/trial/v7/en/games/${json.date}/schedule.json?api_key=nbqpwfg6z6kv4xezfnb46dnu`, // daily schedule
@@ -21,7 +20,9 @@ var fetechGames = function (ctx, logger, nk, payload) {
         'Content-Type': 'application/json',
         Accept: 'application/json',
     };
-    logger.info(payload);
+    var json = JSON.parse(payload);
+    logger.info('userId: %s, payload: $q', ctx.userId, json);
+    logger.info(json.date);
     var response = nk.httpRequest(API_ADMIN_URL + '/api/games', 'get', headers, '');
     logger.debug('Hello World!2');
     return response.body;

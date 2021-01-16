@@ -14,10 +14,9 @@ let fetechSchedule: nkruntime.RpcFunction = function (
 
   let json = JSON.parse(payload)
 
-  logger.info(ctx.userId)
+  logger.info('userId: %s, payload: $q', ctx.userId, json)
   logger.info(json.date)
 
-  //   logger.debug('user_id: %s, payload: %q', ctx.userId, json)
   let response = nk.httpRequest(
     API_BASE_URL +
       '/nhl/trial/v7/en/games/2020/REG/schedule.json?api_key=nbqpwfg6z6kv4xezfnb46dnu', // schedule
@@ -41,7 +40,10 @@ let fetechGames: nkruntime.RpcFunction = function (
     Accept: 'application/json',
   }
 
-  logger.info(payload)
+  let json = JSON.parse(payload)
+
+  logger.info('userId: %s, payload: $q', ctx.userId, json)
+  logger.info(json.date)
 
   let response = nk.httpRequest(
     API_ADMIN_URL + '/api/games',
@@ -60,7 +62,9 @@ let InitModule: nkruntime.InitModule = function (
   nk: nkruntime.Nakama,
   initializer: nkruntime.Initializer,
 ) {
-  let functions = ['schedule', 'user/friend', 'users/{user}']
+  let functions = ['schedule', 'user/friend', 'users']
+
+  // `/users/{user}` should be converted `/users` with payload { user: userId }
 
   functions.forEach((func) => initializer.registerRpc(func, fetechSchedule))
   // initializer.registerRpc('schedule', fetechSchedule)
