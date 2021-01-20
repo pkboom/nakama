@@ -1,6 +1,6 @@
 "use strict";
 var API_BASE_URL = 'http://api.sportradar.us';
-var API_ADMIN_URL = 'http://4039a03a4870.ngrok.io';
+var API_ADMIN_URL = 'http://1b490b262c6d.ngrok.io';
 var fetechSchedule = function (ctx, logger, nk, payload) {
     var headers = {
         'Content-Type': 'application/json',
@@ -20,16 +20,15 @@ var fetechGames = function (ctx, logger, nk, payload) {
         'Content-Type': 'application/json',
         Accept: 'application/json',
     };
-    var json = JSON.parse(payload);
-    logger.info('userId: %s, payload: $q', ctx.userId, json);
-    logger.info(json.date);
-    var response = nk.httpRequest(API_ADMIN_URL + '/api/games', 'get', headers, '');
-    logger.debug('Hello World!2');
+    // let json = JSON.parse(payload)
+    // logger.info('userId: %s, payload: $q', ctx.userId, json)
+    // logger.info('userId: %s, payload: $q', ctx.userId, json)
+    var response = nk.httpRequest(API_ADMIN_URL + '/api/games', 'get', headers, payload);
     return response.body;
 };
 var InitModule = function (ctx, logger, nk, initializer) {
-    var functions = ['schedule', 'user/friend', 'users/{user}'];
-    functions.forEach(function (func) { return initializer.registerRpc(func, fetechSchedule); });
+    // `/users/{user}` should be converted `/users` with payload { user: userId }
+    // functions.forEach((func) => initializer.registerRpc(func, fetechSchedule))
     // initializer.registerRpc('schedule', fetechSchedule)
     initializer.registerRpc('games', fetechGames);
 };
