@@ -1,4 +1,12 @@
 docker-compose up
+
 docker-compose down
 
+
 https://heroiclabs.com/docs/runtime-code-basics/
+
+
+
+dev
+docker-compose -f docker-compose.yml up
+docker-compose down --rmi all
