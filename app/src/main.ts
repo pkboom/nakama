@@ -1,5 +1,11 @@
 const API_BASE_URL = 'http://api.sportradar.us'
-const API_ADMIN_URL = 'http://1b490b262c6d.ngrok.io'
+// const API_ADMIN_URL = 'http://04054e4e2a6e.ngrok.io/api'
+const API_ADMIN_URL = 'http://3.96.66.61/api'
+
+let headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+}
 
 let fetechSchedule: nkruntime.RpcFunction = function (
   ctx: nkruntime.Context,
@@ -11,11 +17,6 @@ let fetechSchedule: nkruntime.RpcFunction = function (
     'Content-Type': 'application/json',
     Accept: 'application/json',
   }
-
-  let json = JSON.parse(payload)
-
-  logger.info('userId: %s, payload: $q', ctx.userId, json)
-  logger.info(json.date)
 
   let response = nk.httpRequest(
     API_BASE_URL +
@@ -35,24 +36,24 @@ let fetechGames: nkruntime.RpcFunction = function (
   nk: nkruntime.Nakama,
   payload: string,
 ): string {
-  let headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  }
+  // logger.info('payload: %q', json)
+  logger.info('context: %q', ctx)
+  logger.info('payload: %q', payload)
 
-  // let json = JSON.parse(payload)
+  return nk.httpRequest(API_ADMIN_URL + '/games', 'get', headers, payload).body
+}
 
-  // logger.info('userId: %s, payload: $q', ctx.userId, json)
-  // logger.info('userId: %s, payload: $q', ctx.userId, json)
+let fetechGame: nkruntime.RpcFunction = function (
+  ctx: nkruntime.Context,
+  logger: nkruntime.Logger,
+  nk: nkruntime.Nakama,
+  payload: string,
+): string {
+  let json = JSON.parse(payload)
 
-  let response = nk.httpRequest(
-    API_ADMIN_URL + '/api/games',
-    'get',
-    headers,
-    payload,
-  )
-
-  return response.body
+  // logger.info(json.id)
+  return nk.httpRequest(API_ADMIN_URL + `/games/${json.id}`, 'get', headers, '')
+    .body
 }
 
 let InitModule: nkruntime.InitModule = function (
@@ -62,8 +63,8 @@ let InitModule: nkruntime.InitModule = function (
   initializer: nkruntime.Initializer,
 ) {
   // `/users/{user}` should be converted `/users` with payload { user: userId }
-
   // functions.forEach((func) => initializer.registerRpc(func, fetechSchedule))
   // initializer.registerRpc('schedule', fetechSchedule)
   initializer.registerRpc('games', fetechGames)
+  initializer.registerRpc('game-detail', fetechGame)
 }

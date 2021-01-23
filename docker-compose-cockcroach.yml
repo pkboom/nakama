@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   cockroachdb:
     container_name: cockroachdb
@@ -20,8 +20,8 @@ services:
       - "/bin/sh"
       - "-ecx"
       - >
-        /nakama/nakama migrate up --database.address root@cockroachdb:26257 &&
-        exec /nakama/nakama --config /nakama/data/config.yml
+          /nakama/nakama migrate up --database.address root@cockroachdb:26257 &&
+          exec /nakama/nakama --config /nakama/data/config.yml
     restart: always
     links:
       - "cockroachdb:db"
