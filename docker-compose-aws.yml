@@ -1,0 +1,29 @@
+version: "3"
+services:
+  nakama:
+    container_name: nakama
+    image: heroiclabs/nakama-prerelease
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - >
+        /nakama/nakama migrate up --database.address postgres:7Jz5k8QsLGAtPKhr2kIa@grizzly-paw-dev.cp6bfarch2tn.ca-central-1.rds.amazonaws.com:5432/postgres &&
+        exec /nakama/nakama --name nakama1 --database.address postgres:7Jz5k8QsLGAtPKhr2kIa@grizzly-paw-dev.cp6bfarch2tn.ca-central-1.rds.amazonaws.com:5432/postgres
+    restart: always
+    volumes:
+      - ./:/nakama/data
+    expose:
+      - "7349"
+      - "7350"
+      - "7351"
+    ports:
+      - "7349:7349"
+      - "7350:7350"
+      - "7351:7351"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7350/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  data:
