@@ -1,7 +1,7 @@
 name: nakama1
 database:
   address:
-    - root@cockroachdb:26257
+    - y:a@127.0.0.1:5432/grizzly
 logger:
   level: "debug"
 session:
